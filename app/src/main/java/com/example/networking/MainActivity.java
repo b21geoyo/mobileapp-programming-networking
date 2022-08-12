@@ -4,6 +4,15 @@ import android.os.Bundle;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings("FieldCanBeLocal")
 public class MainActivity extends AppCompatActivity implements JsonTask.JsonTaskListener {
@@ -31,7 +40,13 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
 
     @Override
     public void onPostExecute(String json) {
+        Log.d("TEST", "onPostExecute: " + json);
+        Gson gson = new Gson();
+        Type type = new TypeToken<List<Mountain>>(){}.getType();
+        ArrayList<Mountain> tmpList = gson.fromJson(json, type);
+        Log.d("TEST", "onPostExecute: " + tmpList.toString());
+        recyclerViewAdapter.setMountains(tmpList);
+        recyclerViewAdapter.notifyDataSetChanged();
         Log.d("MainActivity", json);
     }
-
 }
